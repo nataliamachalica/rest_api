@@ -17,11 +17,15 @@ router.route('/seats').post((req, res) => {
 		id: uuidv4(),
         day: req.body.day,
         seat: req.body.seat,
-		client: req.body.client,
-		email: req.body.email,
+        client: req.body.client,
+        email: req.body.email,
 	}
-	db.seats.push(data);
-	res.json({ message: 'OK' });
+	if(db.seats.some(chosenSeat => (chosenSeat.day == req.body.day && chosenSeat.seat == req.body.seat))) {
+		return res.status(404).json({message: 'seat taken'});
+	} else {
+		db.seats.push(seat);
+		return res.json(db.seats);
+	}
 });
 
 router.route('/seats/:id').delete((req, res) => {
