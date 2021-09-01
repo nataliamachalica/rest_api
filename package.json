@@ -5,8 +5,8 @@
   "repository": "git@github.com:nataliamachalica/rest_api.git",
   "author": "Natalia Szlapka <n.machalica@gmail.com>",
   "license": "MIT",
-  "scripts":{
-  "start": "nodemon server.js"
+  "scripts": {
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
