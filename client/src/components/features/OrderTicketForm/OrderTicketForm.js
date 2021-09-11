@@ -1,3 +1,5 @@
+/* eslint jsx-a11y/anchor-is-valid: 'off' */
+
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Row, Col, Alert, Progress } from 'reactstrap';
 
@@ -39,13 +41,12 @@ class OrderTicketForm extends React.Component {
 
   submitForm = async (e) => {
     const { order } = this.state;
-    const { addSeat, loadSeats } = this.props;
+    const { addSeat, loadSeats, seats } = this.props;
 
     e.preventDefault();
 
     if(order.client && order.email && order.day && order.seat) {
       await addSeat(order);
-      loadSeats();
       this.setState({
         order: {
           client: '',
@@ -58,6 +59,7 @@ class OrderTicketForm extends React.Component {
     } else {
       this.setState({ isError: true });
     }
+    loadSeats(seats);
   }
 
   render() {
