@@ -29,10 +29,11 @@ router.route('/seats').post((req, res) => {
 				email;
 				db.seats.push(req.body);
         res.json({ message: 'OK' });
-		} else {
-			res.json({ message: 'You can\'t leave any fields empty' })
-		}
-	});
+				req.io.emit('seatsUpdated', db.seats, console.log('Seats updated'));
+	} else {
+		res.json({ message: 'You can\'t leave any fields empty' })
+	}
+});
 
 router.route('/seats/:id').delete((req, res) => {
 	const seatDelete = db.seats.indexOf(db.seats.find(item => item.id == req.params.id));
