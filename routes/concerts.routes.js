@@ -1,41 +1,59 @@
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 const db = require('../db');
+
+// ---- testimonials get ---->
 
 router.route('/concerts').get((req, res) => {
 	res.json(db.concerts);
 });
 
-router.route('/concerts/:id').get((req, res) => {
-	res.json(db.concerts[req.params.id]);
+// ---- random get ---->
+
+router.route('/concerts/random').get((req, res) => {
+	const random = Math.ceil(Math.random() * 10);
+	const length = db.concerts.length;
+	const id = random%lenght +1;
+	console.log(random, length, id);
+	res.send(res.json(db.concerts.filter(concert => concert.id == id)));
 });
+
+// ---- :id get ---->
+
+router.route('/concerts/:id').get((req, res) => {
+	res.send(res.json(db.concerts.filter(concert => concert.id == req.params.id)));
+});
+
+// ---- post ---->
 
 router.route('/concerts').post((req, res) => {
-	const data = {
-		id: uuidv4(),
-        performer: req.body.performer,
-        genre: req.body.genre,
-		price: req.body.price,
-		day: req.body.day,
-		image: req.body.image,
-	}
-	db.concerts.push(data);
-	res.json({ message: 'OK' });
+	const id = db.concerts.length;
+	req.body.id = id;
+	res.json(req.body);
 });
 
-router.route('/concerts/:id').delete((req, res) => {
-	db.concerts.splice(`${req.params.id}`, 1);
-	res.json({ message: 'OK' });
-});
+// ---- put ---->
 
 router.route('/concerts/:id').put((req, res) => {
-	db.concerts[req.params.id].performer = req.body.performer;
-	db.concerts[req.params.id].genre = req.body.genre;
-	db.concerts[req.params.id].price = req.body.price;
-	db.concerts[req.params.id].day = req.body.day;
-	db.concerts[req.params.id].image = req.body.image;
+	db.concerts = db.concerts.map(item => {
+		if (item.id == req.params.id) {
+			return {
+				id: req.params.id,
+				author: req.body.author,
+				text: req.body.text,
+			};
+		} else {
+			return item;
+		};
+	})
+	res.json({ message: 'OK' });
+});
+
+// ---- delete ---->
+
+router.route('/concerts/:id').delete((req, res) => {
+	db.concerts.splice(req.params.id, 1);
 	res.json({ message: 'OK' });
 });
 

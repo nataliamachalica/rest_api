@@ -1,60 +1,80 @@
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 const db = require('../db');
+
+//const { v4: uuidv4 } = require('uuid');
+
+// ---- seats get ---->
 
 router.route('/seats').get((req, res) => {
 	res.json(db.seats);
 });
 
+// ---- get random ---->
+
+router.route('/seats/random').get((req, res) => {
+	const random = Math.ceil(Math.random() * 10);
+	const length = db.seats.length;
+	const id = random%length +1;
+	console.log(random, length, id);
+	res.send(res.json(db.seats.filter(testimonial => testimonial.id == id)));
+})
+
+// ---- get id ---->
+
 router.route('/seats/:id').get((req, res) => {
-	const seatData = db.seats.find(item => item.id == req.params.id);
-	res.json(seatData);
+	res.send(res.json(db.seats.filter(testimonial => testimonial.id == req.params.id)));
 });
+
+// ---- post ---->
 
 router.route('/seats').post((req, res) => {
 
-	const { day, seat, client, email } = req.body;
-	req.body.id = uuidv4();
+	const id = db.seats.length;
+	const seat = req.body.seat;
+  const client = req.body.client;
+	const email = req.body.email;
+	const concert = req.body.concert;
+	const day = req.body.day;
 
-	const takenSeat = db.seats.some(item => (item.seat == seat) && (item.day == day));
+	req.body.id = id + 1;
+	res.json(req.body);
 
-	if(takenSeat){
-		res.json({ message: 'seat already taken' });
-	} else if (day && seat && client && email){
-				day;
-				seat;
-				client;
-				email;
-				db.seats.push(req.body);
-        res.json({ message: 'OK' });
-				req.io.emit('seatsUpdated', db.seats, console.log('Seats updated'));
-	} else {
-		res.json({ message: 'You can\'t leave any fields empty' })
-	}
+	db.seats.push({
+		id: id,
+		seat: seat,
+		client: client,
+		email: email,
+		concert: concert,
+		day: day
+	});
+
+	req.io.emit('seatsUpdated', db.seats);
 });
 
-router.route('/seats/:id').delete((req, res) => {
-	const seatDelete = db.seats.indexOf(db.seats.find(item => item.id == req.params.id));
+// ---- put ---->
 
-	db.seats.splice(seatDelete, 1);
+router.route('/seats/:id').put((req, res) => {
+	db.seats = db.seats.map(item => {
+		if (item.id == req.params.id) {
+			return {
+				id: req.params.id,
+				author: req.body.author,
+				text: req.body.text,
+			};
+		}else {
+			return item;
+		};
+	})
 	res.json({ message: 'OK' });
 });
 
-router.route('/seats/:id').put((req, res) => {
-	const seatData = db.seats.find(item => item.id == req.params.id);
-	const{day, seat, client, email} = req.body;
+// ---- delete ---->
 
-	if(day && seat && client && email){
-		seatData.day = day;
-		seatData.seat = seat;
-		seatData.client = client;
-		seatData.email = email;
-		res.json({ message: 'OK' });
-	} else {
-		res.json({ message: 'Fill in form' });
-	}
+router.route('/seats/:id').delete((req, res) => {
+	db.seats.splice(req.params.id, 1);
+	res.json({ message: 'OK' });
 });
 
 module.exports = router;

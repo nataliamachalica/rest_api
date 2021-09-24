@@ -100,9 +100,9 @@ class OrderTicketForm extends React.Component {
             <Button color="primary" className="mt-3">Submit</Button>
           </Col>
           <Col xs="12" md="6">
-            <SeatChooser 
+            <SeatChooser
               chosenDay={order.day}
-              chosenSeat={order.seat} 
+              chosenSeat={order.seat}
               updateSeat={updateSeat} />
           </Col>
         </Row>
