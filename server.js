@@ -6,24 +6,14 @@ const app = express();
 const path = require('path');
 const socket = require('socket.io');
 
-const corsOptions = {
-	origin: true,
-	credentials: true
-}
-
-app.options('*', cors(corsOptions)); // preflight OPTIONS; put before other routes
-app.listen(80, function(){
-  console.log('CORS-enabled web server listening on port 80');
-});
-
 const testimonialsRoutes = require('./routes/testimonials.routes');
 const concertsRoutes = require('./routes/concerts.routes');
 const seatsRoutes = require('./routes/seats.routes');
 
-/*const corsOptions = {
+const corsOptions = {
   origin: 'http://localhost:3000',
   optionsSuccessStatus: 200,
-};*/
+};
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -31,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
-/*app.use(cors(corsOptions));*/
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
 	req.io = io;
