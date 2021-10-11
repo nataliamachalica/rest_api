@@ -1,15 +1,19 @@
 const express = require('express');
+
+const ConcertsController = require('../controllers/concerts.controller');
+
 const router = express.Router();
 
-const db = require('../db');
-
-// ---- testimonials get ---->
+/* ---- testimonials get ---->
 
 router.route('/concerts').get((req, res) => {
 	res.json(db.concerts);
 });
+*/
 
-// ---- random get ---->
+router.get('/concerts', ConcertsController.getAll);
+
+/* ---- random get ---->
 
 router.route('/concerts/random').get((req, res) => {
 	const random = Math.ceil(Math.random() * 10);
@@ -18,22 +22,31 @@ router.route('/concerts/random').get((req, res) => {
 	console.log(random, length, id);
 	res.send(res.json(db.concerts.filter(concert => concert.id == id)));
 });
+*/
 
-// ---- :id get ---->
+router.get('/concerts/random', ConcertsController.getRandom)
+
+/* ---- :id get ---->
 
 router.route('/concerts/:id').get((req, res) => {
 	res.send(res.json(db.concerts.filter(concert => concert.id == req.params.id)));
 });
+*/
 
-// ---- post ---->
+router.get('/concerts/:id', ConcertsController.getById);
+
+/* ---- post ---->
 
 router.route('/concerts').post((req, res) => {
 	const id = db.concerts.length;
 	req.body.id = id;
 	res.json(req.body);
 });
+*/
 
-// ---- put ---->
+router.post('/concerts', ConcertsController.post);
+
+/* ---- put ---->
 
 router.route('/concerts/:id').put((req, res) => {
 	db.concerts = db.concerts.map(item => {
@@ -49,12 +62,18 @@ router.route('/concerts/:id').put((req, res) => {
 	})
 	res.json({ message: 'OK' });
 });
+*/
 
-// ---- delete ---->
+router.put('/concerts/:id', ConcertsController.put);
+
+/* ---- delete ---->
 
 router.route('/concerts/:id').delete((req, res) => {
 	db.concerts.splice(req.params.id, 1);
 	res.json({ message: 'OK' });
 });
+*/
+
+router.delete('concerts/:id', ConcertsController.delete);
 
 module.exports = router;
