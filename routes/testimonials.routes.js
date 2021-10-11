@@ -1,15 +1,20 @@
 const express = require('express');
+const TestimonialsController = require('../controllers/testimonials.controller');
+
 const router = express.Router();
 
-const db = require('../db');
+//const db = require('../db');
 
-// ---- testimonials get ---->
+/* ---- testimonials get ---->
 
 router.route('/testimonials').get((req, res) => {
 	res.json(db.testimonials);
 });
+*/
 
-// ---- random get ---->
+router.get('/testimonials', TestimonialsController.getAll);
+
+/* ---- random get ---->
 
 router.route('/testimonials/random').get((req, res) => {
 	const random = Math.ceil(Math.random() * 10);
@@ -18,22 +23,31 @@ router.route('/testimonials/random').get((req, res) => {
 	console.log(random, length, id);
 	res.send(res.json(db.testimonials.filter(testimonial => testimonial.id == id)));
 });
+*/
 
-// ---- :id get ---->
+router.get('/testimonials/random', TestimonialsController.getRandom);
+
+/* ---- :id get ---->
 
 router.route('/testimonials/:id').get((req, res) => {
 	res.send(res.json(db.testimonials.filter(testimonial => testimonial.id == req.params.id)));
 });
+*/
 
-// ---- post ---->
+router.get('/testimonials/:id', TestimonialsController.getById);
+
+/* ---- post ---->
 
 router.route('/testimonials').post((req, res) => {
 	const id = db.testimonials.length;
 	req.body.id = id;
 	res.json(req.body);
 });
+*/
 
-// ---- put ---->
+router.post('/testimonials', TestimonialsController.post);
+
+/* ---- put ---->
 
 router.route('/testimonials/:id').put((req, res) => {
 	db.testimonials = db.testimonials.map(item => {
@@ -49,12 +63,18 @@ router.route('/testimonials/:id').put((req, res) => {
 	})
 	res.json({ message: 'OK' });
 });
+*/
 
-// ---- delete ---->
+router.put('/testimonials/:id', TestimonialsController.put);
+
+/* ---- delete ---->
 
 router.route('/testimonials/:id').delete((req, res) => {
 	db.testimonials.splice(req.params.id, 1);
 	res.json({ message: 'OK' });
 });
+*/
+
+router.detele('/testimonials/:id', TestimonialsController.delete);
 
 module.exports = router;
