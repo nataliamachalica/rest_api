@@ -1,17 +1,23 @@
 const express = require('express');
+
+const SeatsController = require('../controllers/seats.controller');
+
 const router = express.Router();
 
-const db = require('../db');
+//const db = require('../db');
 
 //const { v4: uuidv4 } = require('uuid');
 
-// ---- seats get ---->
+/* ---- seats get ---->
 
 router.route('/seats').get((req, res) => {
 	res.json(db.seats);
 });
+*/
 
-// ---- get random ---->
+router.get('/seats', SeatsController.getAll);
+
+/* ---- get random ---->
 
 router.route('/seats/random').get((req, res) => {
 	const random = Math.ceil(Math.random() * 10);
@@ -20,14 +26,20 @@ router.route('/seats/random').get((req, res) => {
 	console.log(random, length, id);
 	res.send(res.json(db.seats.filter(testimonial => testimonial.id == id)));
 })
+*/
 
-// ---- get id ---->
+router.get('/seats', SeatsController.getRandom);
+
+/* ---- get id ---->
 
 router.route('/seats/:id').get((req, res) => {
 	res.send(res.json(db.seats.filter(testimonial => testimonial.id == req.params.id)));
 });
+*/
 
-// ---- post ---->
+router.get('/seats/:id', SeatsController.getById)
+
+/* ---- post ---->
 
 router.route('/seats').post((req, res) => {
 
@@ -52,8 +64,11 @@ router.route('/seats').post((req, res) => {
 
 	req.io.emit('seatsUpdated', db.seats);
 });
+*/
 
-// ---- put ---->
+router.post('/seats', SeatsController.post);
+
+/* ---- put ---->
 
 router.route('/seats/:id').put((req, res) => {
 	db.seats = db.seats.map(item => {
@@ -69,12 +84,18 @@ router.route('/seats/:id').put((req, res) => {
 	})
 	res.json({ message: 'OK' });
 });
+*/
 
-// ---- delete ---->
+router.put('/seats/:id', SeatsController.put);
+
+/* ---- delete ---->
 
 router.route('/seats/:id').delete((req, res) => {
 	db.seats.splice(req.params.id, 1);
 	res.json({ message: 'OK' });
 });
+*/
+
+router.delete('/seats/:id', SeatsController.delete);
 
 module.exports = router;
