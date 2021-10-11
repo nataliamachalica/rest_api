@@ -12,6 +12,6 @@ router.post('/testimonials', TestimonialsController.post);
 
 router.put('/testimonials/:id', TestimonialsController.put);
 
-router.detele('/testimonials/:id', TestimonialsController.delete);
+router.delete('/testimonials/:id', TestimonialsController.delete);
 
 module.exports = router;

@@ -18,7 +18,7 @@ const corsOptions = {
 };
 
 // connects our backend code with the database
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://tasia13:pejcab-Vejwe6-kiz@cluster0.amocr.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
@@ -36,6 +36,11 @@ app.use(cors(corsOptions));
 app.use((req, res, next) => {
 	req.io = io;
 	next();
+});
+
+app.use((req, res, next) => {
+  req.db = db;
+  next();
 });
 
 app.use('/api', testimonialsRoutes);
