@@ -18,12 +18,15 @@ const corsOptions = {
 };
 
 // connects our backend code with the database
-mongoose.connect('mongodb+srv://tasia13:pejcab-Vejwe6-kiz@cluster0.amocr.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+const dbURI = process.env.NODE_ENV === 'production'
+    ? 'mongodb+srv://tasia13:pejcab-Vejwe6-kiz@cluster0.amocr.mongodb.net/NewWaveDB?retryWrites=true&w=majority'
+    : 'mongodb://localhost:27017/NewWaveDB';
+mongoose.connect( dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
-db.once('open', () => {
+/*db.once('open', () => {
   console.log('Connected to the database');
-});
+});*/
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -38,10 +41,10 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   req.db = db;
   next();
-});
+});*/
 
 app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
@@ -64,3 +67,5 @@ const io = socket(server);
 io.on('connection', (socket) => {
 	console.log('New socket! ' + socket.id);
 });
+
+module.exports = server;
