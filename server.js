@@ -19,7 +19,7 @@ const corsOptions = {
 
 // connects our backend code with the database
 const dbURI = process.env.NODE_ENV === 'production'
-    ? 'mongodb+srv://tasia13:pejcab-Vejwe6-kiz@cluster0.amocr.mongodb.net/NewWaveDB?retryWrites=true&w=majority'
+    ? 'mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.amocr.mongodb.net/NewWaveDB?retryWrites=true&w=majority'
     : 'mongodb://localhost:27017/NewWaveDB';
 mongoose.connect( dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
