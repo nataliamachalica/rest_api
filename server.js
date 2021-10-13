@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(cors(corsOptions));
+
+app.use(helmet());
 
 app.use((req, res, next) => {
 	req.io = io;
